@@ -1,0 +1,7 @@
+install.packages("verification")
+library(verification)
+x<- c(0,0,0,1,1,1)
+y<- c(.7, .7, 0, 1,5,.6)
+data<-data.frame(x,y)
+names(data)<-c("yes","no")
+roc.plot(data$yes, data$no)
