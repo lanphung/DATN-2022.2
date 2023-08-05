@@ -1,0 +1,5 @@
+thư mục /potential_gene_profiling chứa mã nguồn các chương trình xây dựng danh sách gen tiềm năng cho panel 
+(gồm việc phân loại kiểu hình nội bộ COSMIC; phân loại các bệnh phẩm liên quan đến các bệnh quan tâm, và trích xuất danh sách các gen cho mỗi bệnh)
+
+thư mục /gene_creation chứa mã nguồn các chương trình lọc ra các gen cho panel gen
+(gồm việc lọc bằng chứng biến thể- thuốc điều trị đích cho mỗi gen; tổng hợp dữ liệu bằng chứng và vẽ các biểu đồ/ file báo cáo liên quan)

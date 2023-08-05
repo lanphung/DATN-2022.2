@@ -25,8 +25,9 @@ for tag in tags:
 sp['IS_ASIAN'] = yn['no']
 sp.loc[sp['ETHNICITY'].isin(ae), 'IS_ASIAN'] = yn['yes']
 # print(sp)
-sp.to_csv(dp['msample'],mode = 'w', encoding = 'latin-1', index = False)
+sp.to_csv(dp['msample'],mode = 'w', encoding = 'latin-1', index = False)#create all samples file
 asp = (sp[sp.IS_ASIAN == yn['yes']])
+asp.to_csv(dp['asample'],mode = 'w', encoding = 'latin-1', index = False) #create asian samples file
 for tag in tags:
        print(asp[asp['CLASS'] == tag])
 # print(sp.columns)

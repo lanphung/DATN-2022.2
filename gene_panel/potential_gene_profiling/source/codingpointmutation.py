@@ -7,10 +7,9 @@ import concurrent.futures
 uses = ['COSMIC_PHENOTYPE_ID', 'PRIMARY_SITE', 'SITE_SUBTYPE_1', 'SITE_SUBTYPE_2', 'SITE_SUBTYPE_3',
 'PRIMARY_HISTOLOGY', 'HISTOLOGY_SUBTYPE_1', 'HISTOLOGY_SUBTYPE_2', 'HISTOLOGY_SUBTYPE_3', 'CLASS', 'NAME']
 clsfr = pd.read_csv(dp['classifier'], encoding = 'latin-1', dtype = str, low_memory = False, usecols = uses)
-# clsfr.to_csv(dp['mcmexport'], mode = 'a', index = False)
-# exit()
+
 sz = 10**7
-hdr = pd.read_table(dp['cmexport'], encoding = 'latin-1', nrows = 0)
+hdr = pd.read_table(dp['cmexport'], encoding = 'latin-1', nrows = 0) #header
 old_names = ['Gene name', 'Accession Number',
         'Sample name', 'ID_sample', 'ID_STUDY']
         # 'Genome-wide screen', 'Mutation CDS', 'Mutation AA',
@@ -20,16 +19,14 @@ hdr.rename(columns = dict(zip(old_names, new_names)), inplace = True)
 hdr.columns = map(lambda x: str(x).upper().replace(' ','_'), hdr.columns)    
 
 print(hdr.columns)
-# chunks = pd.read_table(dp['cmexport'], encoding = 'latin-1', dtype = str, low_memory = False, names = hdr.columns, nrows = 100, skiprows = 1)
-# print(chunks)
-
 chunks = pd.read_table(dp['cmexport'], encoding = 'latin-1', dtype = str,names = hdr.columns, low_memory = False, chunksize = 10**6)
 
 _chunk = 0
+#output file
 results = pd.DataFrame(columns = hdr.columns, dtype = str)
 for chunk in chunks:
     # print(chunk.columns)      
-    result = chunk.merge(clsfr).drop_duplicates()
+    result = chunk.merge(clsfr).drop_duplicates() #merge các kiểu hình của classifier.csv vào MutantExport
     print(_chunk)
     # print(result)
     results = pd.concat([results, result]).drop(columns = ['ID_TUMOUR', 

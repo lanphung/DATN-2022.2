@@ -1,0 +1,1 @@
+thư mục /my_code chứa mã nguồn chương trình ứng dụng package driveR trong việc tìm các gen điều khiển, dưới sự cho phép của https://creativecommons.org/licenses/by/4.0/

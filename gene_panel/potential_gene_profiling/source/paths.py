@@ -33,12 +33,17 @@ dpaths = MyDict({
     'action': '{v98g37}/ActionabilityData.tsv',
     'resist': '{v98g37}/CosmicResistanceMutations.tsv',
     # sample output
-    'msample': '{output}/sample.csv',
+    'msample': '{output}/targeted_sample.csv',
+    'asample': '{output}/targeted_asian_sample.csv',
+    'wgen': '{output}/gen_set.csv',
+    'agen': '{output}/asian_gen_set.csv',
     # other source output
     'name': '{output}/nci_and_name.csv',
     # coding point mutation output
-    'mcmexport': '{output}/codingpoint.csv',
-    'ethcodmut': '{output}/ethni_cdpoint.csv',
+    'mcmexport': '{output}/targeted_mutation.csv',
+    'acmexport': '{output}/targeted_asian_mutant.csv', #asian coding point muts
+    'sup_codmut': '{output}/targeted_mutation_sup.csv',
+    'sup_acodmut': '{output}/targeted_asian_mutant_sup.csv',
     # actionablity output
     'maction': '{output}/action.csv',
     # resistance output

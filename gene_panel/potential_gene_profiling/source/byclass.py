@@ -14,7 +14,6 @@ for c in classes:
     hdr.to_csv(dp[c]+'/asiancdpmut.csv', encoding = 'latin-1', mode = 'w', index = False)
 for chunk in chunks:
     # print(chunk.columns)
-
     for c in classes:
         result = chunk[chunk.CLASS == c]
         result.to_csv(dp[c]+'/codingpointmutation.csv', encoding = 'latin-1', mode = 'a', header = False,index = False)
