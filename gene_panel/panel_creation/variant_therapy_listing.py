@@ -42,8 +42,8 @@ gene_Supplement = ['ABL1','CDH1','CEBPA','CTNNB1','ERG','ETV1','ETV4','ETV5','EZ
  'FOXL2','GNA11','GNAQ','HNF1A','IDF1','IDF2','JAK1','JAK3','MAP2K2','MAP2K4','MPL','MYC','MYCN','NPM1'
 ,'PIK3R1','PPARG','PTPN11','RAF1','RUNX1','SMARCB1','SRC','VHL']
 
-geneListW = pd.read_csv(path + f"raw_output/COSMIC/world_gen_set.csv", engine="pyarrow")
-geneListA = pd.read_csv(path + f"raw_output/COSMIC/asia_gen_set.csv", engine="pyarrow")
+geneListW = pd.read_csv(path + f"raw_output/COSMIC/gen_set.csv", engine="pyarrow")
+geneListA = pd.read_csv(path + f"raw_output/COSMIC/asian_gen_set.csv", engine="pyarrow")
 
 world_panel = pd.read_csv(path + "output/panels/gene_panel(names only)_world.csv")['Gene']
 asia_panel = pd.read_csv(path + "output/panels/gene_panel(names only)_asia.csv")['Gene']
@@ -97,7 +97,7 @@ def Civicdb_process(scope):
     else: final_list = cancer_gene_w
     evidence = Civicdb_filter(path + f"raw_output/civicdb/all_types_evidence.csv")
 
-    for j in range(0,6):
+    for j in range(0,5):
         data = _get_gene_list(j, scope)['list']
         if j < 5: relevant_entries = evidence[evidence['disease_type'] == cond[j][0]].reset_index(drop=True)
         else: relevant_entries = evidence
@@ -147,8 +147,8 @@ def _copy_evi_COSMIC(filter, sheet):
 def COSMIC_process(scope):
     if scope=='asia': final_list = cancer_gene_a 
     else: final_list = cancer_gene_w
-    evidence = COSMIC_filter(path + "raw_output/COSMIC/actionability/outer_action.csv")
-    for j in range(0,6):
+    evidence = COSMIC_filter(path + "raw_output/COSMIC/actionability/action.csv")
+    for j in range(0,5):
         data = _get_gene_list(j, scope)['list']
         if j < 5: relevant_entries = evidence[evidence['disease_type'] == cond[j][0]].reset_index(drop=True)
         else: relevant_entries = evidence        
@@ -198,8 +198,8 @@ def _copy_evi_COSMIC_res(filter, sheet):
 def COSMIC_res_process(scope):
     if scope=='asia': final_list = cancer_gene_a 
     else: final_list = cancer_gene_w
-    evidence = COSMIC_res_filter(path + f"raw_output/COSMIC/resistance/resist_6types.csv")
-    for j in range(0,6):
+    evidence = COSMIC_res_filter(path + f"raw_output/COSMIC/resistance/resist.csv")
+    for j in range(0,5):
         data = _get_gene_list(j, scope)['list']
         tier_1_drugs = pd.read_excel(path + f"raw_output/drug_list/VN_approved.xlsx", sheet_name=cond[j][0])
         tier_2_drugs = pd.read_excel(path + f"raw_output/drug_list/VN_unapproved.xlsx", sheet_name=cond[j][0])
@@ -228,7 +228,7 @@ def _output(scope):
     if scope=='asia': final_list = cancer_gene_a 
     else: final_list = cancer_gene_w
     gen_total = []
-    for j in range(0,6):
+    for j in range(0,5):
         print(f"{cond[j][0]} có ({len(final_list[j])}) gen chứa dữ liệu đột biến - thuốc")
         filename = path + f"output/panels/{cond[j][0]}_panel_{scope}.xlsx"
         with pd.ExcelWriter(filename, mode="w", engine="openpyxl") as writer:

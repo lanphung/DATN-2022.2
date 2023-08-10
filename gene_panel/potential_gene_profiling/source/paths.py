@@ -21,7 +21,6 @@ dpaths = MyDict({
     'source': '{base}/source',
     'resource': '{base}/resource',
     'output': '{base}/output',
-    # 
     'classification': '{resource}/classification.csv',
     # classifer outputs
     'classifier': '{output}/classifier.csv',

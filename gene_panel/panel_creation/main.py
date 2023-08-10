@@ -26,10 +26,11 @@ for x,y in zip(df['Approved symbol'], df['Chromosome']):
     genLoc.update({x:y})
 
 my_path = "data_work/gene_panel/creation/raw_output/COSMIC/targeted_mutations/"
-df = pd.read_csv(my_path + "cosmic_mutant_export_modified.csv", engine="pyarrow")
+#df = pd.read_csv(my_path + "cosmic_mutant_export_modified.csv", engine="pyarrow")
 
 
 def _run_variant_listing():
+    print("Begin.")
     vl.Civicdb_process('asia')
     print("done civic asia")
     vl.COSMIC_process('asia')
@@ -43,12 +44,6 @@ def _run_variant_listing():
     vl.COSMIC_res_process('world') 
     print("done cosmic world")
     vl._output('world')
-        
-def _get_civic_db(scope):
-    return vl.Civicfb_filter(pd.read_csv(path + "civic_aevidence.csv", index_col=False))
-
-def _get_cosmic_db(scope):
-    return vl.COSMIC_filter(pd.read_csv(path + "raw_output/COSMIC/merged_action.csv", index_col=False))
 
 def _get_gene_info():
     good_list = {}
@@ -80,15 +75,15 @@ def _get_CDS_mut(variant, sig, dtype, id):
         return variant.split("_")[2]
     else:
         return "n/a"
-        variant = variant.split("_", 1)
-        for x in non_var_list:
-            if x in variant[1] : return variant[1]
-        num = type1[dtype]
-        for x,y,z,w,u in zip(mutantExport[num]['Gene name'],mutantExport[num]['Mutation CDS'],mutantExport[num]['Mutation AA'],mutantExport[num]['CLASS'], mutantExport[num]['HGVSG']):
-            if (x==variant[0]) & (y!= "c.?") & (variant[1] in z) & (w==dtype):
-                gref_var.update({id:u})
-                return y
-        return variant[1]
+        # variant = variant.split("_", 1)
+        # for x in non_var_list:
+        #     if x in variant[1] : return variant[1]
+        # num = type1[dtype]
+        # for x,y,z,w,u in zip(mutantExport[num]['Gene name'],mutantExport[num]['Mutation CDS'],mutantExport[num]['Mutation AA'],mutantExport[num]['CLASS'], mutantExport[num]['HGVSG']):
+        #     if (x==variant[0]) & (y!= "c.?") & (variant[1] in z) & (w==dtype):
+        #         gref_var.update({id:u})
+        #         return y
+        # return variant[1]
 
 def _get_AA_mut(gene, variant, sig):
     if (sig == "Resistance") & ("CDS" in variant):
@@ -147,11 +142,10 @@ def _melt(df, flag):
         new_df['Description'][k] = df['description'][k]
         new_df['pmid'][k] = f"{df['source_type'][k]}:{df['source_id'][k]}"
         new_df['source_db'][k] = df['source_db'][k]
-        genomic_id_list = str(df['genomic_ID'][k]).split(" + ")
-        for item in genomic_id_list:
-            res = _get_rs_value(item.replace("COSV","").replace(".0",""))
-            new_df['rs value'][k] = res
-        #if new_df['rs value'][k] != "": print(new_df['rs value'][k])
+        # genomic_id_list = str(df['genomic_ID'][k]).split(" + ")
+        # for item in genomic_id_list:
+        #     res = _get_rs_value(item.replace("COSV","").replace(".0",""))
+        #     new_df['rs value'][k] = res
     return new_df
 def _is_census(gene):
     df = pd.read_csv(path + "raw_output/COSMIC/cancer_gene_census.csv", engine="pyarrow")
@@ -163,7 +157,7 @@ def _is_census(gene):
 def _run_evidence_merging(scope):
     gen_total=[]
     census_list = []
-    for j in range(2,5):
+    for j in range(0,5):
         new_db = pd.DataFrame(data=None, columns=new_cols)
         panel = pd.ExcelFile(path + f"output/panels/{vl.cond[j][0]}_panel_{scope}.xlsx")
         ########################
@@ -191,14 +185,14 @@ def _run_evidence_merging(scope):
     pd.DataFrame(data=census_list, columns=['Gene', 'yes census?']).drop_duplicates(subset=['Gene', 'yes census?']).reset_index(drop=True).to_csv(path + f"output/panels/gene_panel(names only)_{scope}.csv")
 
 def _rmv_dups(scope):
-    for j in range(0,6):
+    for j in range(0,5):
         final_files = pd.read_csv(path + f"output/BE_files/{vl.cond[j][0]}_{scope}_BE.csv",engine="pyarrow").reset_index(drop=True)
         final_files = final_files.drop_duplicates(keep='first').reset_index(drop=True)
         print(f"{cond[j][0]}: {final_files['Gene name'].nunique()}")
         final_files.reset_index(drop=True).to_csv(path + f"output/BE_files/{vl.cond[j][0]}_{scope}_BE_dr.csv")
 
 def _to_json():
-    for j in range(0,6):
+    for j in range(0,5):
         for scope in ['world','asia']:
             df = pd.read_csv(f"/media/data/lanpd/data_work/gene_panel/creation/output/BE_files/{cond[j][0]}_{scope}_BE_dr.csv")
             df.pop(df.columns[0])
@@ -258,15 +252,10 @@ def _try_stuff_1():
 #_try_stuff_1()
 #_try_stuff()
 
-#_run_variant_listing()
-
-#_run_evidence_merging('asia')
-#_run_evidence_merging('world')
+# _run_variant_listing()
+_run_evidence_merging('asia')
+_run_evidence_merging('world')
 _rmv_dups('asia')
 _rmv_dups('world')
 _to_json()
 
-
-# with open('/media/data/lanpd/data_work/gene_panel/creation/raw_output/COSMIC/targeted_mutations/rs_data.csv', 'w') as f:
-#     for key in my_dictionary.keys():
-#         f.write("%s, %s\n" % (key, my_dictionary[key]))
